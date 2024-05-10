@@ -16,6 +16,8 @@
     <div id="default">
         <h3>Preloaded Spalts :</h3>
         <button onclick="SetInput('4f362242-ad43-4851-9b04-88adf71f24f5')">Lighthouse</button>
+        <button onclick="SetInput('4da7cf32-865a-4515-8cb9-9dfc574c90c2')">SwissMountains</button>
+        <button onclick="SetInput('a7eb44c9-cba1-4fed-b0e2-26f6399549ba')">Frozen Boat</button>
     <div id="loader">
         <h3>Load Content:</h3>
         <input type="text" id="contentID" name="contentID"> 
@@ -84,7 +86,7 @@
 
             
         
-            let renderer = new WebGLRenderer({ antialias: false });
+            let renderer = new WebGLRenderer({ antialias: checkbox1 });
             renderer.xr.enabled = true;
             
             renderer.domElement.style.position = 'absolute';
