@@ -13,10 +13,21 @@
     <title>LumaSplatviewVR</title>
 </head>
 <body>
+    <div id="default">
+        <h3>Preloaded Spalts :</h3>
+        <button onclick="SetInput('4f362242-ad43-4851-9b04-88adf71f24f5')">Lighthouse</button>
     <div id="loader">
         <h3>Load Content:</h3>
         <input type="text" id="contentID" name="contentID"> 
         <button id="loadContentBtn">Load</button>
+        <div>
+            <label for="checkbox1">Antialias:</label>
+            <input type="checkbox" id="checkbox1" >
+        </div>
+        <div>
+            <label for="checkbox2">Particle Reveal:</label>
+            <input type="checkbox" id="checkbox2" >
+        </div>
     </div>
 
     <script>
@@ -27,6 +38,11 @@
         inputElt.addEventListener("input",function(){
             UpdateButton();
         })
+
+        function SetInput(contentID){
+            inputElt.value = contentID;
+            UpdateButton();
+        }
 
         function UpdateButton(){
             btn.disabled = (inputElt.value === '');
@@ -57,8 +73,16 @@
         function LoadSplat() { 
 	
             let contentID = document.getElementById("contentID").value; 
+            let checkbox1 = document.getElementById("checkbox1").checked;
+            let checkbox2 = document.getElementById("checkbox2").checked;
+            console.log("Antialiasing", checkbox1);
+            console.log("Particle effect:", checkbox2);
+
             
             document.getElementById("loader").remove();
+            document.getElementById("default").remove();
+
+            
         
             let renderer = new WebGLRenderer({ antialias: false });
             renderer.xr.enabled = true;
@@ -84,8 +108,7 @@
 
             let splat = new LumaSplatsThree({ 
                 source: 'https://lumalabs.ai/capture/' + contentID,
-                //enableThreeShaderIntegration: false,
-                //particleRevealEnabled: true,
+                particleRevealEnabled: checkbox2,
             });
 
 
