@@ -72,6 +72,7 @@
         import { Color, FogExp2 } from "three";
         
         
+        
         document.getElementById("loadContentBtn").addEventListener("click", LoadSplat);
         function LoadSplat() { 
 	
@@ -114,12 +115,20 @@
                 particleRevealEnabled: checkbox2,
             });
 
-
             splat.position.z = -4;
             splat.position.x = 1; 
+            console.log(typeof(splat))
             scene.add(splat); 
 
+            let frames = 0, prevTime = performance.now();
+            let secondsCounter = 0;
+            let exportTimer = 0;
+            let fpsArray = [];
+
         function frameLoop() {
+
+            
+
             let canvas = renderer.domElement;
             let width = canvas.clientWidth;
             let height = canvas.clientHeight;
@@ -133,8 +142,45 @@
 			controls.update();
             stats.update();
 
-			renderer.render(scene, camera);
-		}
+            
+            let time = performance.now();
+            frames ++;
+            
+            if ( time >= prevTime + 1000 ) {
+                const fps = Math.round((frames * 1000) / (time - prevTime));
+                fpsArray.push(fps); // Store FPS value in the array
+                frames = 0;
+                prevTime = time;
+                // when length of array is mod of 10 then store the array in local storage
+                if (fpsArray.length % 10 === 0) {
+                    console.log('Adding to array...');
+                    localStorage.setItem('fpsData', JSON.stringify(fpsArray)); // Save FPS array to local storage
+                }
+                if (fpsArray.length % 30 === 0) {
+                    exportFpsData();
+                }
+                
+            }
+            
+            renderer.render(scene, camera);
+            
+            }
+
+            function exportFpsData() {
+                const data = JSON.stringify(fpsArray);
+                const blob = new Blob([data], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'fps_data.txt';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+
+			
+            
 
 
         var speed = 0.05; 
@@ -146,8 +192,6 @@
             var direction = new Vector3();
             camera.getWorldDirection(direction);
             direction.normalize();
-            
-            console.log(direction);
 
             var movementVector = new Vector3();
 
@@ -174,6 +218,7 @@
             splat.position.add(movementVector)
 		};
 
+        
         
 		renderer.setAnimationLoop(frameLoop); 
 		 
