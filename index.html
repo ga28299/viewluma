@@ -117,18 +117,22 @@
 
             splat.position.z = -4;
             splat.position.x = 1; 
-            console.log(typeof(splat))
+
+
             scene.add(splat); 
+
 
             let frames = 0, prevTime = performance.now();
             let secondsCounter = 0;
             let exportTimer = 0;
             let fpsArray = [];
 
+
+
         function frameLoop() {
 
             
-
+            
             let canvas = renderer.domElement;
             let width = canvas.clientWidth;
             let height = canvas.clientHeight;
@@ -157,7 +161,7 @@
                     localStorage.setItem('fpsData', JSON.stringify(fpsArray)); // Save FPS array to local storage
                 }
                 if (fpsArray.length % 30 === 0) {
-                    exportFpsData();
+                    exportFpsData(contentID + '_fps_data.txt');
                 }
                 
             }
@@ -166,13 +170,13 @@
             
             }
 
-            function exportFpsData() {
+            function exportFpsData(fname = 'fps_data.txt') {
                 const data = JSON.stringify(fpsArray);
                 const blob = new Blob([data], { type: 'text/plain' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'fps_data.txt';
+                a.download = fname;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
